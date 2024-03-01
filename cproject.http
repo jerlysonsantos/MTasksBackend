@@ -1,0 +1,6 @@
+@cproject_HostAddress = http://localhost:5220
+
+GET {{cproject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
