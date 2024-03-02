@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cproject.Migrations
 {
     [DbContext(typeof(ConnectionContext))]
-    [Migration("20240301233628_Main")]
-    partial class Main
+    [Migration("20240302001547_Version0_1")]
+    partial class Version0_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,7 +64,7 @@ namespace cproject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", "mtasks");
                 });
 
             modelBuilder.Entity("Application.Modules.LaborModule.Models.Labor", b =>
@@ -98,9 +98,26 @@ namespace cproject.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
 
-                    b.ToTable("labors");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("labors", "mtasks");
+                });
+
+            modelBuilder.Entity("Application.Modules.LaborModule.Models.Labor", b =>
+                {
+                    b.HasOne("Application.Modules.Auth.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,6 +18,13 @@ namespace Application.Modules.Auth.Repositories
       return user;
     }
 
+    public void Register(User user)
+    {
+
+
+      this._context.User.Add(user);
+      this._context.SaveChanges();
+    }
 
   }
 }

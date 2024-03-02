@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Application.Modules.Auth.Models
 {
-  [Table("users")]
+  [Table("users", Schema = "mtasks")]
   public class User(int id, string name, string username, string email, string password, DateTime? createdAt, DateTime? updatedAt)
   {
 

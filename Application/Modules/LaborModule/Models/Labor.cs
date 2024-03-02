@@ -1,10 +1,11 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
+using Application.Modules.Auth.Models;
 
 
 namespace Application.Modules.LaborModule.Models
 {
-  [Table("labors")]
+  [Table("labors", Schema = "mtasks")]
   public class Labor(int id, string title, string description, bool isDone, DateTime? createdAt, DateTime? updatedAt)
   {
 
@@ -19,6 +20,10 @@ namespace Application.Modules.LaborModule.Models
 
     [Column("is_done")]
     public required bool IsDone { get; set; } = isDone;
+
+    [Column("user_id")]
+    public required int UserId { get; set; }
+    public required User User { get; set; }
 
     [Column("created_at")]
     public required DateTime? CreatedAt { get; set; } = createdAt;
