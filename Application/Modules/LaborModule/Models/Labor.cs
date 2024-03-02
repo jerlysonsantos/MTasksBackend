@@ -12,10 +12,10 @@ namespace Application.Modules.LaborModule.Models
     [Column("id")]
     public required int Id { get; set; } = id;
 
-    [Column("title")]
+    [Column("title", TypeName = "varchar(100)")]
     public required string Title { get; set; } = title;
 
-    [Column("description")]
+    [Column("description", TypeName = "varchar(100)")]
     public required string Description { get; set; } = description;
 
     [Column("is_done")]

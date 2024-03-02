@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace cproject.Migrations
 {
     [DbContext(typeof(ConnectionContext))]
-    [Migration("20240302001547_Version0_1")]
-    partial class Version0_1
+    [Migration("20240302034945_Version_0_1")]
+    partial class Version_0_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -40,17 +40,17 @@ namespace cproject.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("email");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("password");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -59,7 +59,7 @@ namespace cproject.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("username");
 
                     b.HasKey("Id");
@@ -82,7 +82,7 @@ namespace cproject.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsDone")
@@ -91,7 +91,7 @@ namespace cproject.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAt")

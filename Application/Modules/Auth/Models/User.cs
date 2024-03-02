@@ -1,32 +1,41 @@
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Application.Modules.Auth.Models
 {
   [Table("users", Schema = "mtasks")]
-  public class User(int id, string name, string username, string email, string password, DateTime? createdAt, DateTime? updatedAt)
+  public class User(string name, string username, string email, string password)
   {
 
     [Column("id")]
-    public required int Id { get; set; } = id;
+    [Required]
+    public int Id { get; set; }
 
-    [Column("name")]
-    public required string Name { get; set; } = name;
+    [Column("name", TypeName = "varchar(100)")]
+    [Required]
+    public string Name { get; set; } = name;
 
-    [Column("username")]
-    public required string Username { get; set; } = username;
+    [Column("username", TypeName = "varchar(100)")]
+    [Required]
 
-    [Column("email")]
-    public required string Email { get; set; } = email;
+    public string Username { get; set; } = username;
 
-    [Column("password")]
-    public required string Password { get; set; } = password;
+    [Column("email", TypeName = "varchar(100)")]
+    [Required]
+
+    public string Email { get; set; } = email;
+
+    [Column("password", TypeName = "varchar(200)")]
+    [Required]
+
+    public string Password { get; set; } = password;
 
     [Column("created_at")]
-    public required DateTime? CreatedAt { get; set; } = createdAt;
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     [Column("updated_at")]
-    public required DateTime? UpdatedAt { get; set; } = updatedAt;
+    public DateTime? UpdatedAt { get; set; } = DateTime.Now;
   }
 }

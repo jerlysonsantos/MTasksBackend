@@ -21,6 +21,7 @@ namespace Application.Modules.Auth.Repositories
     public void Register(User user)
     {
 
+      user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
       this._context.User.Add(user);
       this._context.SaveChanges();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace cproject.Migrations
 {
     /// <inheritdoc />
-    public partial class Version0_1 : Migration
+    public partial class Version_0_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,10 +21,10 @@ namespace cproject.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    name = table.Column<string>(type: "varchar(100)", nullable: false),
+                    username = table.Column<string>(type: "varchar(100)", nullable: false),
+                    email = table.Column<string>(type: "varchar(100)", nullable: false),
+                    password = table.Column<string>(type: "varchar(200)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -40,8 +40,8 @@ namespace cproject.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    title = table.Column<string>(type: "varchar(100)", nullable: false),
+                    description = table.Column<string>(type: "varchar(100)", nullable: false),
                     is_done = table.Column<bool>(type: "bit", nullable: false),
                     user_id = table.Column<int>(type: "int", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: true),
