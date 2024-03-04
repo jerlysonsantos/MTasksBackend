@@ -17,11 +17,10 @@ namespace MTasksBackend.Application.Utils
 
       var tokenConfig = new SecurityTokenDescriptor
       {
-        Subject = new ClaimsIdentity(new Claim[]
-        {
-          new Claim("userId", user.Id.ToString()),
-          new Claim("userName", user.Name.ToString()),
-        }),
+        Subject = new ClaimsIdentity(
+        [
+          new Claim(ClaimTypes.Name, user.Id.ToString())
+        ]),
         Expires = DateTime.UtcNow.AddHours(2),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
       };

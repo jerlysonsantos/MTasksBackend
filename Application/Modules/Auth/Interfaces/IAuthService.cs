@@ -10,6 +10,6 @@ namespace Application.Modules.Auth.Interfaces
 
     string Register(RegisterBodyDTO registerBodyDTO);
 
-    string Login(LoginBodyDTO loginBodyDTO);
+    Task<string> Login(LoginBodyDTO loginBodyDTO);
   }
 }

@@ -6,7 +6,7 @@ using Application.Modules.Auth.Models;
 using MTasksBackend.Application.Modules.Auth.DTO;
 using MTasksBackend.Application.Utils;
 
-namespace Application.Modules.Auth
+namespace Application.Modules.Auth.Services
 {
 
   public class AuthService : IAuthService
@@ -34,9 +34,9 @@ namespace Application.Modules.Auth
       return "Sucesso";
     }
 
-    public string Login(LoginBodyDTO loginBodyDTO)
+    public async Task<string> Login(LoginBodyDTO loginBodyDTO)
     {
-      User user = this._userRepository.GetOne(loginBodyDTO.Username);
+      User user = await this._userRepository.GetOne(loginBodyDTO.Username);
 
       bool verified = BCrypt.Net.BCrypt.Verify(loginBodyDTO.Password, user.Password);
 

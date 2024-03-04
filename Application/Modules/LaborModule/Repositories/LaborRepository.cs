@@ -1,23 +1,66 @@
-
+using System.Net;
 using Application.Config;
 using Application.Modules.LaborModule.Interfaces;
 using Application.Modules.LaborModule.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Modules.LaborModule.Repositories
 {
   public class LaborRepository : ILaborRepository
   {
-
     private readonly ConnectionContext _context = new();
 
-
-    public Labor GetOne(int id)
+    public async Task<Labor> Add(Labor labor)
     {
-      Labor user = this._context.Labor.Where(User => User.Id == id).First();
-
-      return user;
+      _context.Labor.Add(labor);
+      await _context.SaveChangesAsync();
+      return labor;
     }
 
+    public async Task<Labor> GetOne(int id, int userId)
+    {
+      try
+      {
+        Labor labor = await _context.Labor
+          .Where(labor => labor.UserId == userId)
+          .Where(labor => labor.Id == id).FirstAsync();
 
+        return labor;
+      }
+      catch (InvalidOperationException)
+      {
+        throw new InvalidOperationException("Tarefa não encontrada");
+      }
+
+    }
+
+    public async Task<List<Labor>> GetAll(int userId)
+    {
+      return await _context.Labor.Where(labor => labor.UserId == userId).ToListAsync();
+    }
+
+    public async Task<Labor> Update(Labor labor)
+    {
+      _context.Entry(labor).State = EntityState.Modified;
+      await _context.SaveChangesAsync();
+      return labor;
+    }
+
+    public async void Delete(int id, int userId)
+    {
+      var labor = await _context.Labor
+        .Where(labor => labor.UserId == userId)
+        .Where(labor => labor.Id == id).FirstAsync();
+
+      if (labor != null)
+      {
+        _context.Labor.Remove(labor);
+        await _context.SaveChangesAsync();
+      }
+    }
   }
 }
+
+
+
+

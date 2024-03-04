@@ -19,24 +19,16 @@ namespace Application.Modules.Auth
       this._authService = authService;
     }
 
-    [Authorize]
-    [HttpGet]
-    public IActionResult Get()
-    {
-      var user = User.FindFirstValue("userId");
-      Console.WriteLine(user);
-
-      return Ok();
-    }
-
     [HttpPost]
-    public IActionResult Login(LoginBodyDTO loginBodyDTO)
+    public async Task<IActionResult> Login(LoginBodyDTO loginBodyDTO)
     {
-      var cookieOptions = new CookieOptions();
-      cookieOptions.Expires = DateTimeOffset.Now.AddDays(1);
-      cookieOptions.Path = "/";
+      CookieOptions cookieOptions = new()
+      {
+        Expires = DateTime.UtcNow.AddHours(2),
+        Path = "/"
+      };
 
-      string token = this._authService.Login(loginBodyDTO);
+      string token = await this._authService.Login(loginBodyDTO);
 
       Response.Cookies.Append("token", token, cookieOptions);
 

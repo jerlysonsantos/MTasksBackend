@@ -1,4 +1,5 @@
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Modules.Auth.Models;
 
@@ -6,29 +7,33 @@ using Application.Modules.Auth.Models;
 namespace Application.Modules.LaborModule.Models
 {
   [Table("labors", Schema = "mtasks")]
-  public class Labor(int id, string title, string description, bool isDone, DateTime? createdAt, DateTime? updatedAt)
+  public class Labor(string title, string description, bool isDone)
   {
-
     [Column("id")]
-    public required int Id { get; set; } = id;
+    [Required]
+    public int Id { get; set; }
 
     [Column("title", TypeName = "varchar(100)")]
-    public required string Title { get; set; } = title;
+    [Required]
+    public string Title { get; set; } = title;
 
     [Column("description", TypeName = "varchar(100)")]
-    public required string Description { get; set; } = description;
+    [Required]
+    public string Description { get; set; } = description;
 
     [Column("is_done")]
-    public required bool IsDone { get; set; } = isDone;
+    [Required]
+    public bool IsDone { get; set; } = isDone;
 
     [Column("user_id")]
-    public required int UserId { get; set; }
-    public required User User { get; set; }
+    [Required]
+    public int UserId { get; set; }
+    public User? User { get; set; }
 
     [Column("created_at")]
-    public required DateTime? CreatedAt { get; set; } = createdAt;
+    public DateTime? CreatedAt { get; set; }
 
     [Column("updated_at")]
-    public required DateTime? UpdatedAt { get; set; } = updatedAt;
+    public DateTime? UpdatedAt { get; set; }
   }
 }

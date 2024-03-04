@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
-using Application.Modules.Auth;
+using Application.Modules.Auth.Services;
 using Application.Modules.Auth.Interfaces;
 using Application.Modules.Auth.Repositories;
+
+using Application.Modules.LaborModule.Services;
 using Application.Modules.LaborModule.Interfaces;
 using Application.Modules.LaborModule.Repositories;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Application.Config;
-using Microsoft.OpenApi.Models;
+using Application.Utils.LoggerManager;
+using Application.Utils.ErrorHandle;
 
 public class Startup
 {
@@ -27,8 +29,11 @@ public class Startup
     services.AddSwaggerGen();
 
     services.AddTransient<IUserRepository, UserRepository>();
-    services.AddTransient<ILaborRepository, LaborRepository>();
     services.AddTransient<IAuthService, AuthService>();
+    services.AddTransient<ILaborRepository, LaborRepository>();
+    services.AddTransient<ILaborService, LaborService>();
+
+    services.AddSingleton<ILoggerManager, LoggerManager>();
 
     var key = Encoding.ASCII.GetBytes(JwtKey.Secret);
 
@@ -46,6 +51,23 @@ public class Startup
           ValidateIssuer = false,
           ValidateAudience = false,
         };
+        options.Events = new JwtBearerEvents
+        {
+          OnChallenge = async (context) =>
+          {
+            context.Response.StatusCode = 401;
+            context.Response.ContentType = "application/json";
+            await context.HttpContext.Response.WriteAsync(new ErrorDetails()
+            {
+              StatusCode = context.Response.StatusCode,
+              Message = "Token inválido."
+            }.ToString());
+
+
+            context.HandleResponse();
+
+          }
+        };
       });
   }
   public void Configure(WebApplication app)
@@ -56,6 +78,7 @@ public class Startup
       app.UseSwaggerUI();
     }
 
+    app.UseMyErrorHandler();
 
     app.Use(async (context, next) =>
     {

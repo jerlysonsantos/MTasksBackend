@@ -2,6 +2,7 @@
 using Application.Config;
 using Application.Modules.Auth.Interfaces;
 using Application.Modules.Auth.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Modules.Auth.Repositories
 {
@@ -11,20 +12,20 @@ namespace Application.Modules.Auth.Repositories
     private readonly ConnectionContext _context = new();
 
 
-    public User GetOne(string username)
+    public async Task<User> GetOne(string username)
     {
-      User user = this._context.User.Where(User => User.Username == username).First();
+      User user = await this._context.User.Where(User => User.Username == username).FirstAsync();
 
       return user;
     }
 
-    public void Register(User user)
+    public async void Register(User user)
     {
 
       user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
       this._context.User.Add(user);
-      this._context.SaveChanges();
+      await this._context.SaveChangesAsync();
     }
 
   }
