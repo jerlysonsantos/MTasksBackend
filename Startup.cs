@@ -23,6 +23,9 @@ public class Startup
   public IConfigurationRoot Configuration { get; }
   public void ConfigureServices(IServiceCollection services)
   {
+
+    services.AddCors();
+
     services.AddControllers();
 
     services.AddEndpointsApiExplorer();
@@ -72,6 +75,12 @@ public class Startup
   }
   public void Configure(WebApplication app)
   {
+
+    app.UseCors(builder => builder
+      .AllowAnyOrigin()
+      .AllowAnyMethod()
+      .AllowAnyHeader());
+
     if (app.Environment.IsDevelopment())
     {
       app.UseSwagger();
