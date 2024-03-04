@@ -4,6 +4,7 @@ using Application.Modules.LaborModule.Interfaces;
 using Application.Utils.ErrorHandle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MTasksBackend.Application.Utils;
 
 namespace Application.Modules.LaborModule
 {
@@ -18,11 +19,24 @@ namespace Application.Modules.LaborModule
     [Authorize]
     public async Task<JsonResult> GetAll()
     {
-      int userIndentityId = int.Parse(User.Identity?.Name ?? "0");
+      try
+      {
+        int userIndentityId = TokenService.GetUserId(User);
 
-      List<LaborDTO> labors = await this._laborService.Get(userIndentityId);
+        List<LaborDTO> labors = await this._laborService.Get(userIndentityId);
 
-      return Json(new { labors });
+        return Json(new { labors });
+      }
+
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
     [HttpGet("{id}")]
     [Authorize]
@@ -30,7 +44,7 @@ namespace Application.Modules.LaborModule
     {
       try
       {
-        int userIndentityId = int.Parse(User.Identity?.Name ?? "0");
+        int userIndentityId = TokenService.GetUserId(User);
 
         LaborDTO labor = await this._laborService.GetById(id, userIndentityId);
 
@@ -40,11 +54,10 @@ namespace Application.Modules.LaborModule
       {
         return Json(new ErrorDetails()
         {
-          StatusCode = (int)HttpStatusCode.NotFound,
+          StatusCode = (int)HttpStatusCode.BadRequest,
           Message = ex.Message
         }
        );
-
       }
     }
 
@@ -52,36 +65,92 @@ namespace Application.Modules.LaborModule
     [Authorize]
     public async Task<JsonResult> Create(CreateLaborDTO labor)
     {
-      int userIndentityId = int.Parse(User.Identity?.Name ?? "0");
+      try
+      {
+        int userIndentityId = TokenService.GetUserId(User);
 
-      LaborDTO laborAdded = await this._laborService.Add(labor, userIndentityId);
+        LaborDTO laborAdded = await this._laborService.Add(labor, userIndentityId);
 
-      return Json(new { message = "Tarefa Adicionada", labor = laborAdded });
-
+        return Json(new { message = "Tarefa Adicionada", labor = laborAdded });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
 
     [HttpPut("{id}")]
     [Authorize]
     public async Task<JsonResult> Update(int id, UpdateLaborDTO labor)
     {
-      int userIndentityId = int.Parse(User.Identity?.Name ?? "0");
+      try
+      {
+        int userIndentityId = TokenService.GetUserId(User);
 
-      LaborDTO laborUpdated = await this._laborService.Update(id, labor, userIndentityId);
+        LaborDTO laborUpdated = await this._laborService.Update(id, labor, userIndentityId);
 
-      return Json(new { message = "Tarefa Atualizada", labor = laborUpdated });
+        return Json(new { message = "Tarefa Atualizada", labor = laborUpdated });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
+    }
+
+    [HttpPatch("{id}/done")]
+    [Authorize]
+    public async Task<JsonResult> Done(int id)
+    {
+      try
+      {
+        int userIndentityId = TokenService.GetUserId(User);
+
+        LaborDTO laborUpdated = await this._laborService.Done(id, userIndentityId);
+
+        return Json(new { message = "Tarefa Atualizada", labor = laborUpdated });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
 
     [HttpDelete("{id}")]
     [Authorize]
-    public JsonResult Delete(int id)
+    public async Task<JsonResult> Delete(int id)
     {
-      int userIndentityId = int.Parse(User.Identity?.Name ?? "0");
+      try
+      {
+        int userIndentityId = TokenService.GetUserId(User);
 
-      this._laborService.Delete(id, userIndentityId);
+        await this._laborService.Delete(id, userIndentityId);
 
-      return Json(new { message = "Tarefa removida" });
+        return Json(new { message = "Tarefa removida" });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
   }
-
-
 }

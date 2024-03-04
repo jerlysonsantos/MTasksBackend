@@ -36,16 +36,24 @@ namespace Application.Modules.Auth.Services
 
     public async Task<string> Login(LoginBodyDTO loginBodyDTO)
     {
-      User user = await this._userRepository.GetOne(loginBodyDTO.Username);
-
-      bool verified = BCrypt.Net.BCrypt.Verify(loginBodyDTO.Password, user.Password);
-
-      if (!verified)
+      try
       {
-        throw new System.Exception("Invalid password");
-      }
+        User user = await this._userRepository.GetOne(loginBodyDTO.Username);
 
-      return TokenService.GenerateToken(user);
+        bool verified = BCrypt.Net.BCrypt.Verify(loginBodyDTO.Password, user.Password);
+
+        if (!verified)
+        {
+          throw new HttpRequestException("Erro ao fazer login. Verifique suas credenciais.");
+        }
+
+        return TokenService.GenerateToken(user);
+      }
+      catch (Exception)
+      {
+
+        throw new HttpRequestException("Erro ao fazer login. Verifique suas credenciais.");
+      }
     }
 
   }

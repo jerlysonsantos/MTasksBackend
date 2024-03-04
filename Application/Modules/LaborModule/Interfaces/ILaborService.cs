@@ -10,6 +10,7 @@ namespace Application.Modules.LaborModule.Interfaces
     Task<LaborDTO> GetById(int id, int userId);
     Task<LaborDTO> Add(CreateLaborDTO labor, int userId);
     Task<LaborDTO> Update(int id, UpdateLaborDTO labor, int userId);
-    void Delete(int id, int userId);
+    Task<LaborDTO> Done(int id, int userId);
+    Task<LaborDTO> Delete(int id, int userId);
   }
 }

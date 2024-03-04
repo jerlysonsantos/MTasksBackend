@@ -46,16 +46,25 @@ namespace Application.Modules.LaborModule.Repositories
       return labor;
     }
 
-    public async void Delete(int id, int userId)
+    public async Task<Labor> Delete(int id, int userId)
     {
-      var labor = await _context.Labor
-        .Where(labor => labor.UserId == userId)
-        .Where(labor => labor.Id == id).FirstAsync();
-
-      if (labor != null)
+      try
       {
-        _context.Labor.Remove(labor);
-        await _context.SaveChangesAsync();
+        var labor = await _context.Labor
+          .Where(labor => labor.UserId == userId)
+          .Where(labor => labor.Id == id).FirstAsync();
+
+        if (labor != null)
+        {
+          _context.Labor.Remove(labor);
+          await _context.SaveChangesAsync();
+        }
+
+        return labor;
+      }
+      catch (InvalidOperationException)
+      {
+        throw new InvalidOperationException("Tarefa não encontrada");
       }
     }
   }

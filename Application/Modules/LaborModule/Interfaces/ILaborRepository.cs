@@ -8,7 +8,7 @@ namespace Application.Modules.LaborModule.Interfaces
     Task<List<Labor>> GetAll(int userId);
     Task<Labor> Add(Labor labor);
     Task<Labor> Update(Labor labor);
-    void Delete(int id, int userId);
+    Task<Labor> Delete(int id, int userId);
 
   }
 }

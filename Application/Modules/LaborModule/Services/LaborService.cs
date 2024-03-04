@@ -30,8 +30,11 @@ namespace Application.Modules.LaborModule.Services
     public async Task<LaborDTO> Add(CreateLaborDTO laborDTO, int userId)
     {
 
-      Labor newLabor = new(laborDTO.Title, laborDTO.Description, laborDTO.IsDone)
+      Labor newLabor = new()
       {
+        Title = laborDTO.Title,
+        Description = laborDTO.Description,
+        IsDone = laborDTO.IsDone,
         UserId = userId
       };
 
@@ -42,20 +45,51 @@ namespace Application.Modules.LaborModule.Services
 
     public async Task<LaborDTO> Update(int id, UpdateLaborDTO laborDTO, int userId)
     {
-      Labor newLabor = new(laborDTO.Title, laborDTO.Description, laborDTO.IsDone)
+      Labor updateLabor = new()
       {
         Id = id,
+        Title = laborDTO.Title,
+        Description = laborDTO.Description,
+        IsDone = laborDTO.IsDone,
         UserId = userId
       };
 
-      Labor labor = await this._laborRepository.Update(newLabor);
+      Labor labor = await this._laborRepository.Update(updateLabor);
 
       return labor.Adapt<LaborDTO>();
     }
 
-    public void Delete(int id, int userId)
+    public async Task<LaborDTO> Done(int id, int userId)
     {
-      this._laborRepository.Delete(id, userId);
+      try
+      {
+        Labor labor = await this._laborRepository.GetOne(id, userId);
+
+        labor.IsDone = true;
+
+        Labor laborUpdated = await this._laborRepository.Update(labor);
+
+        return laborUpdated.Adapt<LaborDTO>();
+      }
+      catch (Exception)
+      {
+
+        throw new Exception("Erro ao salvar tarefa");
+      }
+
+    }
+
+    public async Task<LaborDTO> Delete(int id, int userId)
+    {
+      try
+      {
+        Labor laborRemoved = await this._laborRepository.Delete(id, userId);
+        return laborRemoved.Adapt<LaborDTO>();
+      }
+      catch (Exception)
+      {
+        throw new Exception("Erro ao remover tarefa");
+      }
     }
   }
 }

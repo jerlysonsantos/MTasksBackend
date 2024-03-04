@@ -1,7 +1,6 @@
-using System.Security.Claims;
-using Antelcat.Attributes;
+using System.Net;
 using Application.Modules.Auth.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+using Application.Utils.ErrorHandle;
 using Microsoft.AspNetCore.Mvc;
 using MTasksBackend.Application.Modules.Auth.DTO;
 
@@ -9,7 +8,7 @@ namespace Application.Modules.Auth
 {
   [ApiController]
   [Route("api/public/v1/auth")]
-  public class AuthController : ControllerBase
+  public class AuthController : Controller
   {
 
     private readonly IAuthService _authService;
@@ -20,26 +19,52 @@ namespace Application.Modules.Auth
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginBodyDTO loginBodyDTO)
+    public async Task<JsonResult> Login([FromBody] LoginBodyDTO loginBodyDTO)
     {
-      CookieOptions cookieOptions = new()
+      try
       {
-        Expires = DateTime.UtcNow.AddHours(2),
-        Path = "/"
-      };
+        CookieOptions cookieOptions = new()
+        {
+          Expires = DateTime.UtcNow.AddHours(2),
+          Path = "/"
+        };
 
-      string token = await this._authService.Login(loginBodyDTO);
+        string token = await this._authService.Login(loginBodyDTO);
 
-      Response.Cookies.Append("token", token, cookieOptions);
+        Response.Cookies.Append("token", token, cookieOptions);
 
-      return Ok("Sucesso");
+        return Json(new { message = "Usuário válido" });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
 
     [HttpPost]
     [Route("register")]
-    public IActionResult Register(RegisterBodyDTO registerBodyDTO)
+    public JsonResult Register(RegisterBodyDTO registerBodyDTO)
     {
-      return Ok(this._authService.Register(registerBodyDTO));
+      try
+      {
+        this._authService.Register(registerBodyDTO);
+
+        return Json(new { message = "Usuário criado com sucesso" });
+      }
+      catch (Exception ex)
+      {
+        return Json(new ErrorDetails()
+        {
+          StatusCode = (int)HttpStatusCode.BadRequest,
+          Message = ex.Message
+        }
+       );
+      }
     }
   }
 }

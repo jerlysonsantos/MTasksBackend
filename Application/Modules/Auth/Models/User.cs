@@ -1,12 +1,13 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Application.Utils.BaseEntity;
 
 
 namespace Application.Modules.Auth.Models
 {
   [Table("users", Schema = "mtasks")]
-  public class User(string name, string username, string email, string password)
+  public class User(string name, string username, string email, string password) : BaseEntity
   {
 
     [Column("id")]
@@ -32,10 +33,5 @@ namespace Application.Modules.Auth.Models
 
     public string Password { get; set; } = password;
 
-    [Column("created_at")]
-    public DateTime? CreatedAt { get; set; } = DateTime.Now;
-
-    [Column("updated_at")]
-    public DateTime? UpdatedAt { get; set; } = DateTime.Now;
   }
 }

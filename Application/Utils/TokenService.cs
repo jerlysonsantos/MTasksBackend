@@ -10,6 +10,11 @@ namespace MTasksBackend.Application.Utils
 {
   public static class TokenService
   {
+    public static int GetUserId(ClaimsPrincipal user)
+    {
+      return int.Parse(user.Identity?.Name ?? "0");
+    }
+
     public static string GenerateToken(User user)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
