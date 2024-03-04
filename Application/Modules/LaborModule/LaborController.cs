@@ -17,15 +17,15 @@ namespace Application.Modules.LaborModule
 
     [HttpGet]
     [Authorize]
-    public async Task<JsonResult> GetAll()
+    public async Task<JsonResult> GetAll(int page = 0, int size = 10)
     {
       try
       {
         int userIndentityId = TokenService.GetUserId(User);
 
-        List<LaborDTO> labors = await this._laborService.Get(userIndentityId);
+        LaborPaginateDTO laborsPaginateDto = await this._laborService.Get(userIndentityId, page, size);
 
-        return Json(new { labors });
+        return Json(new { labors = laborsPaginateDto.Labors, size = laborsPaginateDto.Size });
       }
 
       catch (Exception ex)

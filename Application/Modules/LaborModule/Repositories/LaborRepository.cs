@@ -34,9 +34,15 @@ namespace Application.Modules.LaborModule.Repositories
 
     }
 
-    public async Task<List<Labor>> GetAll(int userId)
+    public async Task<List<Labor>> GetAll(int userId, int page = 0, int size = 10)
     {
-      return await _context.Labor.Where(labor => labor.UserId == userId).ToListAsync();
+      int count = await _context.Labor.Where(labor => labor.UserId == userId).CountAsync();
+      return await _context.Labor.Skip(page * size).Take(size).Where(labor => labor.UserId == userId).ToListAsync();
+    }
+
+    public async Task<int> GetCount(int userId, int page = 0, int size = 10)
+    {
+      return await _context.Labor.Where(labor => labor.UserId == userId).CountAsync();
     }
 
     public async Task<Labor> Update(Labor labor)

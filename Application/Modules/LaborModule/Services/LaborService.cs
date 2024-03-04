@@ -12,12 +12,15 @@ namespace Application.Modules.LaborModule.Services
 
     private readonly ILaborRepository _laborRepository = laborRepository;
 
-    public async Task<List<LaborDTO>> Get(int userId)
+    public async Task<LaborPaginateDTO> Get(int userId, int page, int size)
     {
 
-      List<Labor> labors = await _laborRepository.GetAll(userId);
+      int count = await _laborRepository.GetCount(userId, page, size);
+      List<Labor> labors = await _laborRepository.GetAll(userId, page, size);
 
-      return labors.Adapt<List<LaborDTO>>();
+      List<LaborDTO> laborsDto = labors.Adapt<List<LaborDTO>>();
+
+      return new LaborPaginateDTO(count, laborsDto);
     }
 
     public async Task<LaborDTO> GetById(int id, int userId)

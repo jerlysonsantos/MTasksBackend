@@ -77,9 +77,10 @@ public class Startup
   {
 
     app.UseCors(builder => builder
-      .AllowAnyOrigin()
+      .WithOrigins("http://localhost:4200")
       .AllowAnyMethod()
-      .AllowAnyHeader());
+      .AllowAnyHeader()
+      .AllowCredentials());
 
     if (app.Environment.IsDevelopment())
     {
