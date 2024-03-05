@@ -30,7 +30,7 @@ public class ErrorHandler
     var errorResponse = new ErrorDetails()
     {
       StatusCode = (int)HttpStatusCode.InternalServerError,
-      Message = "Erro interno"
+      Message = exception.Message
     };
 
     _log.LogError($"Error: {exception.Message}");

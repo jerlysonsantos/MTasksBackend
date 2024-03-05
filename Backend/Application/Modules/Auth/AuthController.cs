@@ -37,12 +37,7 @@ namespace Application.Modules.Auth
       }
       catch (Exception ex)
       {
-        return Json(new ErrorDetails()
-        {
-          StatusCode = (int)HttpStatusCode.BadRequest,
-          Message = ex.Message
-        }
-       );
+        throw new HttpRequestException(ex.Message);
       }
     }
 
@@ -58,12 +53,7 @@ namespace Application.Modules.Auth
       }
       catch (Exception ex)
       {
-        return Json(new ErrorDetails()
-        {
-          StatusCode = (int)HttpStatusCode.BadRequest,
-          Message = ex.Message
-        }
-       );
+        throw new HttpRequestException(ex.Message);
       }
     }
   }
