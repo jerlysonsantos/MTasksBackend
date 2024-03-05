@@ -10,7 +10,25 @@ namespace Application.Config
     public DbSet<User> User { get; set; }
     public DbSet<Labor> Labor { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=master;User Id=sa;Password=Mssql!Passw0rd;encrypt=false;");
+    private string _Server;
+    private string _Port;
+    private string _Database;
+    private string _User;
+    private string _Password;
+    private string _Encrypt;
+
+    public ConnectionContext()
+    {
+      _Server = Environment.GetEnvironmentVariable("DATABASE_SERVER") ?? "localhost";
+      _Port = Environment.GetEnvironmentVariable("DATABASE_PORT") ?? "1433";
+      _Database = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "master";
+      _User = Environment.GetEnvironmentVariable("DATABASE_USER") ?? "sa";
+      _Password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ?? "password";
+      _Encrypt = Environment.GetEnvironmentVariable("DATABASE_ENCRYPT") ?? "false";
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+      => optionsBuilder.UseSqlServer($"Server={_Server},{_Port};Database={_Database};User Id={_User};Password={_Password};encrypt={_Encrypt};");
 
     public override int SaveChanges()
     {

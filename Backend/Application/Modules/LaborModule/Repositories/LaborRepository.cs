@@ -1,7 +1,9 @@
-using System.Net;
+
 using Application.Config;
+using Application.Modules.LaborModule.DTO;
 using Application.Modules.LaborModule.Interfaces;
 using Application.Modules.LaborModule.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Modules.LaborModule.Repositories
@@ -37,7 +39,12 @@ namespace Application.Modules.LaborModule.Repositories
     public async Task<List<Labor>> GetAll(int userId, int page = 0, int size = 10)
     {
       int count = await _context.Labor.Where(labor => labor.UserId == userId).CountAsync();
-      return await _context.Labor.Skip(page * size).Take(size).OrderBy(labor => labor.CreatedAt).Where(labor => labor.UserId == userId).ToListAsync();
+      return await _context.Labor
+        .Skip(page * size)
+        .Take(size)
+        .OrderBy(labor => labor.IsDone)
+        .ThenByDescending(labor => labor.CreatedAt)
+        .Where(labor => labor.UserId == userId).ToListAsync();
     }
 
     public async Task<int> GetCount(int userId, int page = 0, int size = 10)
@@ -45,16 +52,30 @@ namespace Application.Modules.LaborModule.Repositories
       return await _context.Labor.Where(labor => labor.UserId == userId).CountAsync();
     }
 
-    public async Task<Labor> Update(Labor labor)
+    public async Task<Labor> Update(int id, UpdateLaborDTO laborDTO, int userId)
     {
-      var getLabor = _context.Labor.Where(labor => labor.Id == labor.Id).First();
+      var labor = await this.GetOne(id, userId);
 
-      labor.CreatedAt = getLabor.CreatedAt;
+      labor.Title = laborDTO.Title;
+      labor.Description = laborDTO.Description;
+      labor.IsDone = laborDTO.IsDone;
 
       _context.Entry(labor).State = EntityState.Modified;
       await _context.SaveChangesAsync();
       return labor;
     }
+
+    public async Task<Labor> Done(int id, int userId)
+    {
+      var labor = await this.GetOne(id, userId);
+
+      labor.IsDone = true;
+
+      _context.Entry(labor).State = EntityState.Modified;
+      await _context.SaveChangesAsync();
+      return labor;
+    }
+
 
     public async Task<Labor> Delete(int id, int userId)
     {
@@ -70,7 +91,7 @@ namespace Application.Modules.LaborModule.Repositories
           await _context.SaveChangesAsync();
         }
 
-        return labor;
+        return labor ?? new Labor();
       }
       catch (InvalidOperationException)
       {

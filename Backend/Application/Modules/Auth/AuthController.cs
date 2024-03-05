@@ -1,6 +1,5 @@
-using System.Net;
+
 using Application.Modules.Auth.Interfaces;
-using Application.Utils.ErrorHandle;
 using Microsoft.AspNetCore.Mvc;
 using Application.Modules.Auth.DTO;
 
@@ -50,6 +49,22 @@ namespace Application.Modules.Auth
         this._authService.Register(registerBodyDTO);
 
         return Json(new { message = "Usuário criado com sucesso" });
+      }
+      catch (Exception ex)
+      {
+        throw new HttpRequestException(ex.Message);
+      }
+    }
+
+    [HttpPost]
+    [Route("logout")]
+    public JsonResult Logout()
+    {
+      try
+      {
+        Response.Cookies.Delete("token");
+
+        return Json(new { message = "Usuário deslogado" });
       }
       catch (Exception ex)
       {

@@ -101,6 +101,9 @@ namespace UnitTests
         public async Task Update_ReturnsLaborDTO()
         {
             int userId = 1;
+            int id = 1;
+
+            UpdateLaborDTO laborDTO = new UpdateLaborDTO("Updated Task", "Updated Description", true);
 
             Labor returnLabor = new Labor
             {
@@ -114,13 +117,9 @@ namespace UnitTests
             LaborDTO expectedLaborDTO = new LaborDTO(1, "Task", "Description", false);
 
             var laborRepositoryMock = new Mock<ILaborRepository>();
-
-            laborRepositoryMock.Setup(repo => repo.Update(It.IsAny<Labor>())).ReturnsAsync(returnLabor);
+            laborRepositoryMock.Setup(repo => repo.Update(id, laborDTO, userId)).ReturnsAsync(returnLabor);
 
             var laborService = new LaborService(laborRepositoryMock.Object);
-            int id = 1;
-
-            UpdateLaborDTO laborDTO = new UpdateLaborDTO("Updated Task", "Updated Description", true);
 
             var result = await laborService.Update(id, laborDTO, userId);
 
@@ -137,15 +136,6 @@ namespace UnitTests
             int id = 1;
             int userId = 1;
 
-            Labor returnGetLabor = new Labor
-            {
-                Id = 1,
-                Title = "Task",
-                Description = "Description",
-                IsDone = false,
-                UserId = userId
-            };
-
             Labor returnLabor = new Labor
             {
                 Id = 1,
@@ -156,8 +146,7 @@ namespace UnitTests
             };
 
             var laborRepositoryMock = new Mock<ILaborRepository>();
-            laborRepositoryMock.Setup(repo => repo.GetOne(id, userId)).ReturnsAsync(returnGetLabor);
-            laborRepositoryMock.Setup(repo => repo.Update(returnGetLabor)).ReturnsAsync(returnLabor);
+            laborRepositoryMock.Setup(repo => repo.Done(id, userId)).ReturnsAsync(returnLabor);
 
             var laborService = new LaborService(laborRepositoryMock.Object);
 

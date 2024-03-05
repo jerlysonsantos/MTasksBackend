@@ -48,16 +48,8 @@ namespace Application.Modules.LaborModule.Services
 
     public async Task<LaborDTO> Update(int id, UpdateLaborDTO laborDTO, int userId)
     {
-      Labor updateLabor = new()
-      {
-        Id = id,
-        Title = laborDTO.Title,
-        Description = laborDTO.Description,
-        IsDone = laborDTO.IsDone,
-        UserId = userId
-      };
 
-      Labor labor = await this._laborRepository.Update(updateLabor);
+      Labor labor = await this._laborRepository.Update(id, laborDTO, userId);
 
       return labor.Adapt<LaborDTO>();
     }
@@ -66,11 +58,8 @@ namespace Application.Modules.LaborModule.Services
     {
       try
       {
-        Labor labor = await this._laborRepository.GetOne(id, userId);
 
-        labor.IsDone = true;
-
-        Labor laborUpdated = await this._laborRepository.Update(labor);
+        Labor laborUpdated = await this._laborRepository.Done(id, userId);
 
         return laborUpdated.Adapt<LaborDTO>();
       }
