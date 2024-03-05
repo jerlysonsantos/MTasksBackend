@@ -6,7 +6,7 @@ using Application.Config;
 using Application.Modules.Auth.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MTasksBackend.Application.Utils
+namespace Application.Utils
 {
   public static class TokenService
   {

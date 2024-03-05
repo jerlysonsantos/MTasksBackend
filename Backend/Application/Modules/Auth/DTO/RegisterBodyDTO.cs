@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MTasksBackend.Application.Modules.Auth.DTO
+namespace Application.Modules.Auth.DTO
 {
   public record RegisterBodyDTO(
     [Required(ErrorMessage = "O nome é obrigatório.")]

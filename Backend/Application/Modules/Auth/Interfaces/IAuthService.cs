@@ -1,6 +1,6 @@
 
 
-using MTasksBackend.Application.Modules.Auth.DTO;
+using Application.Modules.Auth.DTO;
 
 namespace Application.Modules.Auth.Interfaces
 {

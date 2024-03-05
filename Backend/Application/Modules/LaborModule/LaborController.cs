@@ -4,7 +4,7 @@ using Application.Modules.LaborModule.Interfaces;
 using Application.Utils.ErrorHandle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MTasksBackend.Application.Utils;
+using Application.Utils;
 
 namespace Application.Modules.LaborModule
 {

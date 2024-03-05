@@ -2,7 +2,7 @@ using System.Net;
 using Application.Modules.Auth.Interfaces;
 using Application.Utils.ErrorHandle;
 using Microsoft.AspNetCore.Mvc;
-using MTasksBackend.Application.Modules.Auth.DTO;
+using Application.Modules.Auth.DTO;
 
 namespace Application.Modules.Auth
 {

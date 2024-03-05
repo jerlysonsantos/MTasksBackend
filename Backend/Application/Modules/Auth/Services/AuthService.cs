@@ -3,8 +3,8 @@
 using Application.Modules.Auth.Interfaces;
 using Application.Modules.Auth.Models;
 
-using MTasksBackend.Application.Modules.Auth.DTO;
-using MTasksBackend.Application.Utils;
+using Application.Modules.Auth.DTO;
+using Application.Utils;
 
 namespace Application.Modules.Auth.Services
 {
